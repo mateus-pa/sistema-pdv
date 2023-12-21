@@ -30,7 +30,7 @@ const autenticaUsuario = async (req, res, next) => {
         }
 
         console.log(error);
-        return res.status(500).json({ mensagem: 'erro interno no servidor' });
+        return res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
 

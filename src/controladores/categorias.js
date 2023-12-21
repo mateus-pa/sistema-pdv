@@ -8,7 +8,7 @@ categoriasControlador.listar = async (req, res) => {
 
         return res.status(200).json(categorias);
     } catch (error) {
-        return res.status(500).json({ mensagem: 'Erro interno no servidor' });
+        return res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
 
