@@ -14,4 +14,6 @@ rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
 
+
+
 module.exports = rotas;
