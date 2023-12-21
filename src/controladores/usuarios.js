@@ -25,7 +25,7 @@ usuariosControlador.cadastrar = async function (req, res) {
         return res.status(200).json("O usuario foi cadastrado com sucesso!");
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ mensagem: error.message });
+        return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 };
 usuariosControlador.detalharPerfil = async (req, res) => {
@@ -39,22 +39,21 @@ usuariosControlador.detalharPerfil = async (req, res) => {
 
 usuariosControlador.editarPerfil = async (req, res) => {
     const { nome, email, senha } = req.body;
-    const { id } = req.params
 
     try {
-        const verificarEmail = await knex('usuarios').where({ email })
-        const senhaCriptografada = await bcrypt.hash(senha, 10)
+        const verificarEmail = await knex('usuarios').where({ email });
+        const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        if (parseInt(verificarEmail.rows[0].count) !== 0) {
-            return res.status(403).json('O email já está cadastrado no sistema')
+        if (verificarEmail.length > 0) {
+            return res.status(403).json('O email já está cadastrado no sistema');
         }
-        await knex('usuario')
-            .update({ nome, email, senhaCriptografada })
-            .where({ id })
-        return res.status(200).send()
+        await knex('usuarios')
+            .update({ nome, email, senha: senhaCriptografada })
+            .where({ id: req.usuario.id });
+        return res.status(200).send();
     }
-    catch (erro) {
-        console.log(erro);
+    catch (error) {
+        console.log(error);
         return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 }

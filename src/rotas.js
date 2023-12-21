@@ -13,13 +13,11 @@ const loginSchema = require('./validacoes/loginSchema');
 const usuariosSchema = require('./validacoes/usuariosSchema');
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
-
 rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 
 rotas.use(autenticaUsuario);
 
 rotas.get('/categoria', categoriasControlador.listar);
-
 rotas.get('/usuario', usuariosControlador.detalharPerfil);
 rotas.put('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.editarPerfil);
 
