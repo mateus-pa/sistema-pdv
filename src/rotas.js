@@ -14,6 +14,7 @@ rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
 
-
+rotas.post("/categorias", cadastrarCategoria)
+rotas.get("/categorias", listarCategoria);
 
 module.exports = rotas;
