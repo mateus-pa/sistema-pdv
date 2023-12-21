@@ -2,16 +2,16 @@ const express = require('express');
 
 const rotas = express();
 
-const loginController = require('./controladores/login');
-const usuariosController = require('./controladores/usuarios');
+const loginControlador = require('./controladores/login');
+const usuariosControlador = require('./controladores/usuarios');
 
 const validaCorpoRequisicao = require('./intermediarios/validaCorpoRequisicao');
 
 const loginSchema = require('./validacoes/loginSchema');
-const usuarioSchema = require('./validacoes/usuarioSchema');
+const usuariosSchema = require('./validacoes/usuariosSchema');
 
-rotas.post('/login', validaCorpoRequisicao(loginSchema));
+rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 
-rotas.post('/usuario', validaCorpoRequisicao(usuarioSchema));
+rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
 
 module.exports = rotas;

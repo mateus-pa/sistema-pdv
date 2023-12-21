@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('joi');
 
 const loginSchema = joi.object({
 	email: joi.string().email().required().messages({
