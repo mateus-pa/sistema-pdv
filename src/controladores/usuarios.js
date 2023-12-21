@@ -42,9 +42,6 @@ usuariosControlador.editarPerfil = async (req, res) => {
     const { id } = req.params
 
     try {
-        if (!nome || !email || !senha) {
-            return res.status(400).json({ mensagem: 'O campo é obrigatório!' })
-        }
         const verificarEmail = await knex('usuarios').where({ email })
         const senhaCriptografada = await bcrypt.hash(senha, 10)
 
