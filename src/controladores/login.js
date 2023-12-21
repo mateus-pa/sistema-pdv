@@ -8,7 +8,7 @@ const login = async (req, res) => {
     try {
         const usuario = await knex('usuarios').where({ email }).first();
 
-        if (usuario.length === 0) {
+        if (!usuario) {
             return res
                 .status(400)
                 .json({ mensagem: 'Usuário e/ou senha inválido(s).' });
