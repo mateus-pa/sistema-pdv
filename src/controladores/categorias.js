@@ -1,47 +1,15 @@
 const knex = require('../bancodedados/conexao');
 
-const cadastrarCategoria = async (req, res) => {
-    const { descricao } = req.body;
+const categoriasControlador = {};
 
-    if(!descricao){
-        return res.status(400).json({ mensagem: 'A descrição da Categoria é obrigatória '})
-    }
-
-    const categoriaExiste = await pool.query(
-        `SELECT * FROM categorias WHERE descricao = $1`,
-        [descricao]
-      );
-
-      if (categoriaExiste.rowCount > 0)
-      return res.status(400).json({
-        mensagem: "Categoria já cadastrada",
-      });
-
+categoriasControlador.listar = async (req, res) => {
     try {
-        const query = 'insert into categorias(descricao) values ($1) returning *'
-        const {rows} = await pool.query(query,[descricao])
+        const categorias = await knex('categorias');
 
-        return res.status(201).json(rows[0]);
+        return res.status(200).json(categorias);
     } catch (error) {
-        return res.status(500).json({ mensagem: 'Erro interno do servidor'})
+        return res.status(500).json({ mensagem: 'Erro interno no servidor' });
     }
 }
 
-const listarCategoria = async (req, res ) => {
-    try {
-        const query = 'SELECT * FROM categorias'
-                
-
-        const { rows } = await pool.query(query)
-
-        return res.json(rows)
-        
-    } catch (error) {
-        return res .status(500).json({ mensagem: 'Erro interno do servidor' })
-    }
-}
-
-module.exports = {
-    cadastrarCategoria,
-    listarCategoria
-}
+module.exports = categoriasControlador;
