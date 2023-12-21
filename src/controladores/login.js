@@ -26,7 +26,7 @@ const login = async (req, res) => {
             expiresIn: '8h',
         });
 
-        const { senha: senhaUsuario, ...dadosUsuario } = usuario;
+        const { senha: senhaUsuariso, ...dadosUsuario } = usuario;
 
         return res.status(200).json({
             usuario: dadosUsuario,

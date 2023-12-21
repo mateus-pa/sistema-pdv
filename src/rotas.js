@@ -14,7 +14,7 @@ const usuariosSchema = require('./validacoes/usuariosSchema');
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
 
-rotas.get('/usuario', autenticaUsuario(loginSchema), usuariosControlador.detalharPerfil);
+rotas.get('/usuario', autenticaUsuario(usuariosSchema), usuariosControlador.detalharPerfil);
 rotas.put('/usuario', autenticaUsuario(usuariosSchema), usuariosControlador.editarPerfil);
 rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 

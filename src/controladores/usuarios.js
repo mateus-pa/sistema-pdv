@@ -7,7 +7,7 @@ usuariosControlador.cadastrar = async function (req, res) {
     const { nome, email, senha } = req.body;
 
     try {
-        // TODO: intermedário de validação do email
+        // TODO:as intermedário de validação do email
         const quantidadeUsuarios = await knex('usuarios').where({ email });
 
         if (quantidadeUsuarios.length > 0) {
@@ -18,7 +18,7 @@ usuariosControlador.cadastrar = async function (req, res) {
 
         const usuario = await knex('usuarios').insert({ nome, email, senha: senhaCriptografada });
 
-        if (usuario === 0) {
+        if (usuario == 0) {
             return res.status(400).json("O usuário não foi cadastrado.");
         }
 
@@ -29,34 +29,37 @@ usuariosControlador.cadastrar = async function (req, res) {
     }
 };
 usuariosControlador.detalharPerfil = async (req, res) => {
-    const detalharUsuario = req.usuario;
-
-    return res.status(200).json(detalharUsuario);
+    try {
+        const detalharUsuario = req.usuario;
+        return res.status(200).json(detalharUsuario);
+    } catch (error) {
+        return res.status(401).send()
+    }
 }
 
 usuariosControlador.editarPerfil = async (req, res) => {
     const { nome, email, senha } = req.body;
+    const { id } = req.params
 
     try {
-        if (!nome) {
-            return res.status(400).json({ mensagem: 'Campo nome é obrigatório!' })
+        if (!nome || !email || !senha) {
+            return res.status(400).json({ mensagem: 'O campo é obrigatório!' })
         }
-        if (!email) {
-            return res.status(400).json({ mensagem: 'Campo email é obrigatório!' })
+        const verificarEmail = await knex('usuarios').where({ email })
+        const senhaCriptografada = await bcrypt.hash(senha, 10)
+
+        if (parseInt(verificarEmail.rows[0].count) !== 0) {
+            return res.status(403).json('O email já está cadastrado no sistema')
         }
-        if (!senha) {
-            return res.status(400).json({ mensagem: 'Campo senha é obrigatório!' })
-        }
+        await knex('usuario')
+            .update({ nome, email, senhaCriptografada })
+            .where({ id })
+        return res.status(200).send()
     }
     catch (erro) {
         console.log(erro);
         return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 }
-// - Validar os campos obrigatórios: 
-//     - nome
-//     - email
-//     - senha
-// - A senha deve ser criptografada utilizando algum algoritmo de criptografia confiável.
-// - O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois usuários possuírem o mesmo e-mail.
+
 module.exports = usuariosControlador;
