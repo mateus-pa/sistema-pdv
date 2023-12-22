@@ -52,44 +52,41 @@ clientesControlador.editarPerfil = async (req, res) => {
     const { id } = req.params;
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
-    clientesControlador.detalharPerfil = async (req, res) => {
-        try {
-            const cliente = await knex('clientes').where({ id }).first();
-            if (!cliente) {
-                return res.status(404).json('O cliente não foi encontrado');
-            };
+    try {
+        const cliente = await knex('clientes').where({ id }).first();
+        if (!cliente) {
+            return res.status(404).json({ mensagem: 'O cliente não foi encontrado' });
+        };
 
-            if (email !== cliente.email) {
-                const quantidadeClientes = await knex('clientes').where({ email });
+        if (email !== cliente.email) {
+            const quantidadeClientes = await knex('clientes').where({ email });
 
-                if (quantidadeClientes.length > 0) {
-                    return res.status(400).json({ mensagem: "O email já existe" });
-                }
+            if (quantidadeClientes.length > 0) {
+                return res.status(400).json({ mensagem: "O email já existe" });
             }
+        }
 
-            if (cpf !== cliente.cpf) {
-                const cpfClientes = await knex('clientes').where({ cpf });
+        if (cpf !== cliente.cpf) {
+            const cpfClientes = await knex('clientes').where({ cpf });
 
-                if (cpfClientes.length > 0) {
-                    return res.status(400).json({ mensagem: "O cpf já existe" });
-                }
+            if (cpfClientes.length > 0) {
+                return res.status(400).json({ mensagem: "O cpf já existe" });
             }
-
-            await knex('clientes').where({ id })
-                .update({
-                    nome, email, cpf, cep, rua, numero, bairro, cidade, estado
-                });
-
-            return res.status(204).send();
         }
-        catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: 'Erro interno do servidor' });
-        }
+
+        await knex('clientes').where({ id })
+            .update({
+                nome, email, cpf, cep, rua, numero, bairro, cidade, estado
+            });
+
+        return res.status(204).send();
     }
-
-
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
 }
+
 clientesControlador.listar = async (req, res) => {
 
     try {

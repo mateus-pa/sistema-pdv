@@ -10,35 +10,39 @@ const pedidosControlador = {};
 
 pedidosControlador.cadastrar = async (req, res) => {
     try {
-
         const { cliente_id, observacao, pedido_produtos } = req.body;
 
-        const cliente = await knex('clientes').where({ id: cliente_id }).first()
+        const cliente = await knex('clientes').where({ id: cliente_id }).first();
         if (!cliente) {
-            return res.status(400).json('Insira um ID de cliente válido!')
-        };
+            return res.status(400).json({ error: 'Insira um ID de cliente válido!' });
+        }
 
         if (!pedido_produtos || pedido_produtos.length === 0) {
-            return res.status(400).json('Por favor, insira ao menos um produto ao seu pedido.')
-        };
+            return res.status(400).json({ error: 'Por favor, insira ao menos um produto ao seu pedido.' });
+        }
 
         const produtos = await knex('produtos').whereIn('id', pedido_produtos.map(item => item.produto_id));
 
+        const erros = [];
+
         const produtosPromises = pedido_produtos.map(async ({ produto_id, quantidade_produto }) => {
-            const produto = await knex('produtos').where({ id: produto_id }).first();
+            const produto = produtos.find((prod) => prod.id === produto_id);
             if (!produto) {
-                throw new Error('O produto não é válido');
-            };
-            if (produto.quantidade_estoque < quantidade_produto) {
-                throw new Error('A quantidade em estoque é insuficiente para o pedido');
-            };
+                erros.push({ error: 'O produto não é válido', produto_id });
+            } else if (produto.quantidade_estoque < quantidade_produto) {
+                erros.push({ error: 'A quantidade em estoque é insuficiente para o pedido', produto_id });
+            }
         });
+
         await Promise.all(produtosPromises);
 
+        if (erros.length > 0) {
+            return res.status(400).json(erros);
+        }
 
         const valor_total = pedido_produtos.reduce((total, { produto_id, quantidade_produto }) => {
             const produto = produtos.find((prod) => prod.id === produto_id);
-            return total + produto.valor * quantidade_produto
+            return total + (produto ? produto.valor * quantidade_produto : 0);
         }, 0);
 
         const novoPedido = {
@@ -46,8 +50,6 @@ pedidosControlador.cadastrar = async (req, res) => {
             observacao,
             valor_total
         };
-
-
 
         let inserirPedidoId;
 
@@ -65,13 +67,14 @@ pedidosControlador.cadastrar = async (req, res) => {
             await trx.commit();
         });
 
-        return res.status(201).json({ message: 'Pedido cadastrado com sucesso!', pedido_id: inserirPedidoId })
+        return res.status(201).json({ message: 'Pedido cadastrado com sucesso!', pedido_id: inserirPedidoId });
 
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: 'Erro interno de servidor' })
+        console.error(error);
+        return res.status(500).json({ message: 'Erro interno de servidor' });
     }
 };
+
 
 pedidosControlador.listar = async (req, res) => {
     const { cliente_id } = req.query
