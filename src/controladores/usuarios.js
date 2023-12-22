@@ -50,7 +50,7 @@ usuariosControlador.editarPerfil = async (req, res) => {
         await knex('usuarios')
             .update({ nome, email, senha: senhaCriptografada })
             .where({ id: req.usuario.id });
-        return res.status(200).send();
+        return res.status(204).send();
     }
     catch (error) {
         console.log(error);
