@@ -18,6 +18,7 @@ O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de
 - **Knex:** Biblioteca query-builder para Node.js e interação com banco de dados relacionais.
 - **dotenv:** Biblioteca para carregar variáveis de ambiente no projeto.
 - **date-fns:** Biblioteca que fornece funções para manipulação, formatação e cálculos de datas.
+- **nodemailer:** Módulo que permite enviar e-mails para o seu servidor com facilidade. 
 
 ## Estrutura de Pastas
 - **bancodedados:** Para arquivos relacionados à criação das estruturas do banco de dados.
