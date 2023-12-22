@@ -30,6 +30,7 @@ rotas.put('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador
 rotas.post('/clientes', validaCorpoRequisicao(clientesSchema), clientesControlador.cadastrar);
 rotas.get('/clientes', clientesControlador.detalharPerfil);
 rotas.put('/clientes', validaCorpoRequisicao(clientesSchema), clientesControlador.editarPerfil);
+rotas.get('/clientes', clientesControlador.listar);
 
 rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);

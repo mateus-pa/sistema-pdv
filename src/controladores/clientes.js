@@ -60,4 +60,14 @@ clientesControlador.editarPerfil = async (req, res) => {
     }
 }
 
+clientesControlador.listar = async (req, res) => {
+    try {
+        const clientes = await knex('clientes');
+
+        return res.status(200).json(clientes);
+    } catch (error) {
+        return res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
+
 module.exports = clientesControlador;
