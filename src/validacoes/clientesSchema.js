@@ -16,6 +16,7 @@ const clientesSchema = joi.object({
 		'any.required': 'O campo cpf é obrigatório.',
 		'string.empty': 'O campo cpf é obrigatório.'
 	})
+
 });
 
 module.exports = clientesSchema;

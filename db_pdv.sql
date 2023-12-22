@@ -26,12 +26,23 @@ create table tokens (
     token text not null
 );
 
-create table clientes(
+create table produtos (
+  id serial primary key,
+  descricao varchar(30) not null,
+  quantidade_estoque integer,
+  valor integer not null,
+  categoria_id integer references categorias(id) on delete cascade
+);
+
+create table clientes (
   id serial primary key,
   nome text not null,
   email text unique,
-  cpf char(11) unique not null
-  
+  cpf varchar(14),
+  cep varchar(9),
+  rua text,
+  numero integer,
+  bairro text,
+  cidade text,
+  estado text
 );
-
-
