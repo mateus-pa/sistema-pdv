@@ -13,7 +13,7 @@ const autenticaUsuario = require('./intermediarios/autenticacao');
 
 const loginSchema = require('./validacoes/loginSchema');
 const usuariosSchema = require('./validacoes/usuariosSchema');
-const produtoSchema = require('./validacoes/produtosSchema');
+const produtosSchema = require('./validacoes/produtosSchema');
 
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
@@ -26,8 +26,8 @@ rotas.get('/categoria', categoriasControlador.listar);
 rotas.get('/usuario', usuariosControlador.detalharPerfil);
 rotas.put('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.editarPerfil);
 
-rotas.post('/produto', validaCorpoRequisicao(produtoSchema), produtosControlador.cadastrar)
-rotas.put('/produto/:id', produtosControlador.editar)
+rotas.post('/produto', validaCorpoRequisicao(produtosSchema), produtosControlador.cadastrar);
+rotas.put('/produto/:id', validaCorpoRequisicao(produtosSchema), produtosControlador.editar);
 rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
 

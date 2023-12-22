@@ -6,15 +6,15 @@ produtosControlador.cadastrar = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
     try {
-        const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first()
+        const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first();
 
         if (!categoriaExiste) {
-            return res.status(400).json('A categoria não existe em nossa base de dados!')
+            return res.statu(400).json('A categoria não existe em nossa base de dados!');
         };
 
         const produtoDuplicado = await knex('produtos').where({ descricao }).first();
         if (produtoDuplicado) {
-            return res.status(201).json('O produto já está cadastrado na nossa base de dados e foi duplicado!');
+            return res.status(400).json('O produto já está cadastrado na nossa base de dados e foi duplicado!');
         };
 
         const novoProduto = await knex('produtos').insert({
@@ -22,15 +22,16 @@ produtosControlador.cadastrar = async (req, res) => {
             quantidade_estoque,
             valor,
             categoria_id
-        });
+        }).returning('*');
 
         if (!novoProduto) {
             return res.status(400).json('O produto não foi cadastrado!');
         }
 
+        return res.status(201).json(novoProduto[0]);
     } catch (error) {
-        console.error(error)
-        return res.status(500).send();
+        console.log(error);
+        return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 };
 
@@ -39,18 +40,14 @@ produtosControlador.editar = async (req, res) => {
     const { id } = req.params
 
     try {
-
-        if (!descricao || !quantidade_estoque || !valor) {
-            res.status(400).json('O campo é obrigatório!')
-        }
         const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first();
         if (!categoriaExiste) {
-            return res.status(400).json('A categoria não existe em nossa base de dados!')
+            return res.status(400).json('A categoria não existe em nossa base de dados!');
         };
 
         const produto = await knex('produtos').where({ id }).first();
         if (!produto) {
-            res.status(400).json('O produto não está cadastrado!')
+            return res.status(400).json('O produto não está cadastrado!');
         };
 
         await knex('produtos')
@@ -63,11 +60,10 @@ produtosControlador.editar = async (req, res) => {
                 categoria_id
             });
 
-        const produtoEditado = await knex('produtos').where({ id }).first();
-        return res.status(200).json('Poduto atualizado com sucesso!', produtoEditado);
-
+        return res.status(204).send();
     } catch (error) {
-        return res.status(500).send();
+        console.log(error);
+        return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 }
 
