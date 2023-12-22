@@ -6,7 +6,7 @@ clientesControlador.cadastrar = async function (req, res) {
     const { nome, email, cpf } = req.body;
 
     try {
-        // TODO:as intermedário de validação do email
+
         const quantidadeClientes = await knex('clientes').where({ email });
 
         if (quantidadeClientes.length > 0) {
@@ -21,7 +21,7 @@ clientesControlador.cadastrar = async function (req, res) {
 
         const clientes = await knex('clientes').insert({ nome, email, cpf });
 
-        if (clientes === 0) {
+        if (clientes.length === 0) {
             return res.status(400).json({ mensagem: "O cliente não foi cadastrado." });
         }
 
