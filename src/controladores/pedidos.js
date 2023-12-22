@@ -3,6 +3,7 @@ const { required } = require('joi');
 const knex = require('../bancodedados/conexao');
 
 const transport = require('./mail');
+const produtosControlador = require('./produtos');
 
 const pedidosControlador = {};
 
@@ -55,7 +56,7 @@ pedidosControlador.cadastrar = async (req, res) => {
 
             const destinatarioEmail = cliente.email;
             transport.sendMail({
-                from: `${process.env.MAIL_NAME} <{${process.env.MAIL_FROM}>`,
+                from: `${process.env.MAIL_NAME} <${process.env.MAIL_FROM}>`,
                 to: destinatarioEmail,
                 subject: 'Pedido processado',
                 text: 'O seu pedido foi cadastrado com sucesso'
@@ -68,10 +69,47 @@ pedidosControlador.cadastrar = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json('Erro interno de servidor')
+        return res.status(500).json({ message: 'Erro interno de servidor' })
     }
+};
 
+pedidosControlador.listar = async (req, res) => {
+    const { cliente_id } = req.query
+
+    try {
+        let pedidosEProdutos = [];
+
+        if (cliente_id) {
+            const pedido = await knex('pedidos').where({ cliente_id }).first()
+
+            if (!pedido) {
+                return res.status(400).json({ message: 'Nenhum pedido para este cliente' })
+            }
+
+            const pedido_produtos = await knex('pedido_produtos')
+                .where({ pedido_id: pedido.id }).select('*')
+
+            pedidosEProdutos.push({ ...pedido, pedido_produtos })
+        } else {
+            pedidosEProdutos = await knex('pedidos')
+
+            if (pedidosEProdutos.length === 0) {
+                return res.status(400).json({ message: 'Nenhum pedido foi encontrado' })
+            }
+
+            for (let i = 0; i < pedidosEProdutos.length; i++) {
+                const pedido_produtos = await knex('pedido_produtos')
+                    .where({ pedido_id: pedidosEProdutos[i].id }).select('*')
+
+                pedidosEProdutos[i].pedido_produtos = pedido_produtos
+            }
+        }
+        return res.status(200).json(pedidosEProdutos)
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error }, 'Erro interno de servidor')
+    }
 }
-
 
 module.exports = pedidosControlador

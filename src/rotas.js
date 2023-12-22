@@ -8,6 +8,7 @@ const usuariosControlador = require('./controladores/usuarios');
 const categoriasControlador = require('./controladores/categorias');
 const produtosControlador = require('./controladores/produtos');
 const clientesControlador = require('./controladores/clientes');
+const pedidosControlador = require('./controladores/pedidos');
 
 const validaCorpoRequisicao = require('./intermediarios/validaCorpoRequisicao');
 const autenticaUsuario = require('./intermediarios/autenticacao');
@@ -18,7 +19,7 @@ const usuariosSchema = require('./validacoes/usuariosSchema');
 const produtosSchema = require('./validacoes/produtosSchema');
 const clientesSchema = require('./validacoes/clientesSchema');
 const pedidosSchema = require('./validacoes/pedidosSchema');
-const pedidosControlador = require('./controladores/pedidos');
+
 
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
@@ -42,6 +43,7 @@ rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
 
 rotas.post('/pedidos', validaCorpoRequisicao(pedidosSchema), pedidosControlador.cadastrar);
+rotas.get('/pedidos', pedidosControlador.listar);
 
 
 module.exports = rotas;
