@@ -25,6 +25,8 @@ rotas.get('/categoria', categoriasControlador.listar);
 rotas.get('/usuario', usuariosControlador.detalharPerfil);
 rotas.put('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.editarPerfil);
 
+rotas.post('/produto', produtosControlador.cadastrar)
+rotas.put('/produto/:id', produtosControlador.editar)
 rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
 
