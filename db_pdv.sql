@@ -26,3 +26,12 @@ create table tokens (
     token text not null
 );
 
+create table clientes(
+  id serial primary key,
+  nome text not null,
+  email text unique,
+  cpf char(11) unique not null
+  
+);
+
+
