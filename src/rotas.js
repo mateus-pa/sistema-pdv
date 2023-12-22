@@ -40,6 +40,7 @@ rotas.put('/produto/:id', multer.single('produto_imagem'), validaCorpoRequisicao
 rotas.get('/produto', produtosControlador.listar);
 rotas.get('/produto/:id', produtosControlador.detalhar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
+rotas.get('/produto/:id', produtosControlador.detalhar);
 
 rotas.get('/cliente/:id', clientesControlador.detalharPerfil);
 rotas.put('/cliente/:id', validaCorpoRequisicao(clientesSchema), clientesControlador.editarPerfil);
