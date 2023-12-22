@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const rotas = express();
 
@@ -15,6 +16,7 @@ const usuariosSchema = require('./validacoes/usuariosSchema');
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
 rotas.post('/login', validaCorpoRequisicao(loginSchema), loginControlador);
 
+rotas.use(cors())
 rotas.use(autenticaUsuario);
 
 rotas.get('/categoria', categoriasControlador.listar);
