@@ -17,6 +17,8 @@ const loginSchema = require('./validacoes/loginSchema');
 const usuariosSchema = require('./validacoes/usuariosSchema');
 const produtosSchema = require('./validacoes/produtosSchema');
 const clientesSchema = require('./validacoes/clientesSchema');
+const pedidosSchema = require('./validacoes/pedidosSchema');
+const pedidosControlador = require('./controladores/pedidos');
 
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
@@ -38,5 +40,8 @@ rotas.post('/produto', multer.single('produto_imagem'), validaCorpoRequisicao(pr
 rotas.put('/produto/:id', multer.single('produto_imagem'), validaCorpoRequisicao(produtosSchema), produtosControlador.editar);
 rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
+
+rotas.post('/pedidos', validaCorpoRequisicao(pedidosSchema), pedidosControlador.cadastrar);
+
 
 module.exports = rotas;

@@ -76,8 +76,7 @@ produtosControlador.editar = async (req, res) => {
 
         await knex('produtos')
             .where({ id })
-            .update
-            ({
+            .update({
                 descricao,
                 quantidade_estoque,
                 valor,
