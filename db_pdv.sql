@@ -46,3 +46,6 @@ create table clientes (
   cidade text,
   estado text
 );
+
+alter table produtos
+add produto_imagem text;
