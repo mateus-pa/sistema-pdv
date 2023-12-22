@@ -156,6 +156,12 @@ produtosControlador.excluir = async (req, res) => {
 
         await knex('produtos').del().where({ id });
 
+        if (produtoExiste[0].produto_imagem) {
+            const path = produtoExiste[0].produto_imagem.split(`https://${process.env.BACKBLAZE_BUCKET}.${process.env.S3_ENDPOINT}/`)[1];
+
+            await armazenamento.deleteFile(path);
+        }
+
         return res.status(204).send();
     } catch (error) {
         console.log(error);
