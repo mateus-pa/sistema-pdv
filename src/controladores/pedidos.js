@@ -99,11 +99,11 @@ pedidosControlador.listar = async (req, res) => {
                 return res.status(400).json({ message: 'Nenhum pedido foi encontrado' })
             }
 
-            for (let i = 0; i < pedidosEProdutos.length; i++) {
+            for (const element of pedidosEProdutos) {
                 const pedido_produtos = await knex('pedido_produtos')
-                    .where({ pedido_id: pedidosEProdutos[i].id }).select('*')
+                    .where({ pedido_id: element.id }).select('*')
 
-                pedidosEProdutos[i].pedido_produtos = pedido_produtos
+                element.pedido_produtos = pedido_produtos
             }
         }
         return res.status(200).json(pedidosEProdutos)
