@@ -25,4 +25,23 @@ produtosControlador.listar = async (req, res) => {
     }
 }
 
+produtosControlador.excluir = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const produtoExiste = await knex('produtos').where({ id });
+
+        if (produtoExiste.length === 0) {
+            return res.status(400).json({ mensagem: 'Não existe produto para o id informado.' });
+        }
+
+        await knex('produtos').del().where({ id });
+
+        return res.status(204).send();
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+}
+
 module.exports = produtosControlador;

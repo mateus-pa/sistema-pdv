@@ -26,5 +26,6 @@ rotas.get('/usuario', usuariosControlador.detalharPerfil);
 rotas.put('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.editarPerfil);
 
 rotas.get('/produto', produtosControlador.listar);
+rotas.delete('/produto/:id', produtosControlador.excluir);
 
 module.exports = rotas;
