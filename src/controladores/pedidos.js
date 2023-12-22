@@ -1,10 +1,15 @@
+const { required } = require('joi');
+
 const knex = require('../bancodedados/conexao');
+
+const transport = require('./mail');
 
 const pedidosControlador = {};
 
 
 pedidosControlador.cadastrar = async (req, res) => {
     try {
+
         const { cliente_id, observacao, pedido_produtos } = req.body;
 
         const cliente = await knex('clientes').where({ id: cliente_id }).first()
@@ -41,11 +46,24 @@ pedidosControlador.cadastrar = async (req, res) => {
             valor_total
         };
 
+
+
         let inserirPedidoId;
 
         await knex.transaction(async (trx) => {
             inserirPedidoId = await trx('pedidos').insert(novoPedido);
+
+            const destinatarioEmail = 'otonyelotto@gmail.com'
+            transport.sendMail({
+                from: `${process.env.MAIL_NAME} <{${process.env.MAIL_FROM}>`,
+                to: destinatarioEmail,
+                subject: 'Pedido processado',
+                text: 'O seu pedido foi cadastrado com sucesso'
+            });
+
+            await trx.commit();
         });
+
         return res.status(201).json({ message: 'Pedido cadastrado com sucesso!', pedido_id: inserirPedidoId })
 
     } catch (error) {
@@ -56,4 +74,4 @@ pedidosControlador.cadastrar = async (req, res) => {
 }
 
 
-module.exports = pedidosControlador;
+module.exports = pedidosControlador
