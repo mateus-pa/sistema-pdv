@@ -21,10 +21,10 @@ pedidosControlador.cadastrar = async (req, res) => {
         const produtosPromises = pedido_produtos.map(async ({ produto_id, quantidade_produto }) => {
             const produto = await knex('produtos').where({ id: produto_id }).first();
             if (!produto) {
-                return res.status(400).json('O produto não é válido')
+                throw new Error('O produto não é válido');
             };
             if (produto.quantidade_estoque < quantidade_produto) {
-                return res.status(400).json('A quantidade em estoque é insuficiente para o pedido')
+                throw new Error('A quantidade em estoque é insuficiente para o pedido');
             };
         });
         await Promise.all(produtosPromises);
