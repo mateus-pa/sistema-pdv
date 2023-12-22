@@ -50,7 +50,7 @@ create table clientes (
 create table pedidos (
   id serial primary key,
   cliente_id integer references clientes(id),
-  observacao varchar(30),
+  observacao text,
   valor_total integer not null
 );
 
@@ -64,3 +64,5 @@ create table pedido_produtos (
 
 alter table produtos
 alter column produto_imagem varchar(300);
+alter table produtos
+add produto_imagem text;

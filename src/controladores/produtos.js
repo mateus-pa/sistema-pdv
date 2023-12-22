@@ -1,4 +1,5 @@
 const knex = require('../bancodedados/conexao');
+const armazenamento = require('../servicos/armazenamento');
 
 const produtosControlador = {};
 
@@ -17,7 +18,7 @@ produtosControlador.cadastrar = async (req, res) => {
             return res.status(400).json('O produto já está cadastrado na nossa base de dados e foi duplicado!');
         };
 
-        const novoProduto = await knex('produtos').insert({
+        let novoProduto = await knex('produtos').insert({
             descricao,
             quantidade_estoque,
             valor,
@@ -28,6 +29,22 @@ produtosControlador.cadastrar = async (req, res) => {
             return res.status(400).json('O produto não foi cadastrado!');
         }
 
+        if (req.file) {
+            const { originalname, mimetype, buffer } = req.file;
+
+            const id = novoProduto[0].id;
+
+            const produto_imagem = await armazenamento.uploadFile(
+                `produtos/${id}/${originalname}`,
+                buffer,
+                mimetype
+            );
+
+            novoProduto = await knex('produtos').update({
+                produto_imagem: produto_imagem.url
+            }).where({ id }).returning('*');
+        }
+
         return res.status(201).json(novoProduto[0]);
     } catch (error) {
         console.log(error);
@@ -36,8 +53,8 @@ produtosControlador.cadastrar = async (req, res) => {
 };
 
 produtosControlador.editar = async (req, res) => {
-    const { descricao, quantidade_estoque, valor, categoria_id } = req.body
-    const { id } = req.params
+    const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+    const { id } = req.params;
 
     try {
         const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first();
@@ -46,18 +63,41 @@ produtosControlador.editar = async (req, res) => {
         };
 
         const produto = await knex('produtos').where({ id }).first();
+
         if (!produto) {
             return res.status(400).json('O produto não está cadastrado!');
         };
 
+        if (produto.produto_imagem) {
+            const path = produto.produto_imagem.split(`https://${process.env.BACKBLAZE_BUCKET}.${process.env.S3_ENDPOINT}/`)[1];
+
+            await armazenamento.deleteFile(path);
+        }
+
         await knex('produtos')
             .where({ id })
-            .update({
+            .update
+            ({
                 descricao,
                 quantidade_estoque,
                 valor,
-                categoria_id
+                categoria_id,
+                produto_imagem: null
             });
+
+        if (req.file) {
+            const { originalname, mimetype, buffer } = req.file;
+
+            const produto_imagem = await armazenamento.uploadFile(
+                `produtos/${id}/${originalname}`,
+                buffer,
+                mimetype
+            );
+
+            await knex('produtos').update({
+                produto_imagem: produto_imagem.url
+            }).where({ id });
+        }
 
         return res.status(204).send();
     } catch (error) {
@@ -115,6 +155,12 @@ produtosControlador.excluir = async (req, res) => {
         }
 
         await knex('produtos').del().where({ id });
+
+        if (produtoExiste[0].produto_imagem) {
+            const path = produtoExiste[0].produto_imagem.split(`https://${process.env.BACKBLAZE_BUCKET}.${process.env.S3_ENDPOINT}/`)[1];
+
+            await armazenamento.deleteFile(path);
+        }
 
         return res.status(204).send();
     } catch (error) {

@@ -18,6 +18,7 @@ clientesControlador.cadastrar = async function (req, res) {
         if (cpfClientes.length > 0) {
             return res.status(400).json({ mensagem: "O cpf já existe" });
         }
+
         const clientes = await knex('clientes').insert({ nome, email, cpf });
 
         if (clientes.length === 0) {
