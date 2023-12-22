@@ -7,6 +7,10 @@ const knex = require('knex')({
         password: process.env.DB_PASS,
         port: process.env.DB_PORT,
     },
+    pool: {
+        min: 2,
+        max: 10,
+    },
     ssl: { rejectUnauthorized: false }
 });
 
