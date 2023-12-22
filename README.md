@@ -50,6 +50,3 @@ Certifique-se de que você possui todas as dependências instaladas (incluindo �
 ## Considerações
 Agora você tem um sistema de Frente de Caixa em execução!<div>
 É importante se atentar de que o sistema está em fase inicial e conta com poucas funcionalidades. Você pode inicialmente, usar as rotas para controle de usuários.
-
-**Link**
-https://busy-lime-tadpole-belt.cyclic.app/
