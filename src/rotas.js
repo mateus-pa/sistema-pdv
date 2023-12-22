@@ -11,12 +11,13 @@ const clientesControlador = require('./controladores/clientes');
 
 const validaCorpoRequisicao = require('./intermediarios/validaCorpoRequisicao');
 const autenticaUsuario = require('./intermediarios/autenticacao');
-const multer = require('./intermediarios/multer');
 
 const loginSchema = require('./validacoes/loginSchema');
 const usuariosSchema = require('./validacoes/usuariosSchema');
 const produtosSchema = require('./validacoes/produtosSchema');
 const clientesSchema = require('./validacoes/clientesSchema');
+const pedidosSchema = require('./validacoes/pedidosSchema');
+const pedidosControlador = require('./controladores/pedidos');
 
 
 rotas.post('/usuario', validaCorpoRequisicao(usuariosSchema), usuariosControlador.cadastrar);
@@ -34,9 +35,12 @@ rotas.get('/cliente/:id', clientesControlador.detalharPerfil);
 rotas.put('/cliente/:id', validaCorpoRequisicao(clientesSchema), clientesControlador.editarPerfil);
 rotas.get('/cliente', clientesControlador.listar);
 
-rotas.post('/produto', multer.single('produto_imagem'), validaCorpoRequisicao(produtosSchema), produtosControlador.cadastrar);
-rotas.put('/produto/:id', multer.single('produto_imagem'), validaCorpoRequisicao(produtosSchema), produtosControlador.editar);
+rotas.post('/produto', validaCorpoRequisicao(produtosSchema), produtosControlador.cadastrar);
+rotas.put('/produto/:id', validaCorpoRequisicao(produtosSchema), produtosControlador.editar);
 rotas.get('/produto', produtosControlador.listar);
 rotas.delete('/produto/:id', produtosControlador.excluir);
+
+rotas.post('/pedidos', validaCorpoRequisicao(pedidosSchema), pedidosControlador.cadastrar);
+
 
 module.exports = rotas;
