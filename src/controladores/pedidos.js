@@ -1,9 +1,8 @@
 const { required } = require('joi');
-
+const { produtosControlador } = require('./produtos');
 const knex = require('../bancodedados/conexao');
-
 const transport = require('./mail');
-const produtosControlador = require('./produtos');
+
 
 const pedidosControlador = {};
 
