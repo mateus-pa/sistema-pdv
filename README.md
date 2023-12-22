@@ -4,8 +4,8 @@
 
 # Descrição
 
-O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de vendas em um negócio. Inicialmente, o sistema inclui funcionalidades de cadastro de usuário, login,  detalhamento de perfil do usuário, edição de perfil do usuário e listagem de categorias.
-
+O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de vendas em um negócio.
+O sistema inclui funcionalidades de **Categorias**, **Usuários**, **Produtos**, **Clientes** e **Pedidos**.
 
 # Tecnologias utilizadas
 
@@ -19,6 +19,8 @@ O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de
 - **dotenv:** Biblioteca para carregar variáveis de ambiente no projeto.
 - **date-fns:** Biblioteca que fornece funções para manipulação, formatação e cálculos de datas.
 - **nodemailer:** Módulo que permite enviar e-mails para o seu servidor com facilidade. 
+- **multer:** Middleware node. js para manipulação multipart/form-data , para fazer upload de arquivos.
+
 
 ## Estrutura de Pastas
 - **bancodedados:** Para arquivos relacionados à criação das estruturas do banco de dados.
@@ -38,6 +40,23 @@ O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de
 - **Detalhar perfil do usuário logado**: Permite que o usuário obtenha detalhes de seu perfil, como nome e email.
 - **Editar perfil de usuário logado**: Permite que o usuário altere dados do seu perfil.
 
+### Produtos
+- **Cadastrar produto**: Permite que o usuário cadastre produtos no sistema.
+- **Editar dados do produto**: Permite que o usuário altere dados de produtos no sistema.
+- **Listar produtos**: Permite que o usuário obtenha uma listagem dos produtos no sistema.
+- **Detalhar produto**: Permite que o usuário obtenha detalhes de um produto especifico.
+- **Excluir produto**: Permite que o usuário exclua um produto, com base no seu id.
+
+### Clientes
+- **Cadastrar clientes**: Permite que o usuário cadastre um cliente, fornecendo nome, email, cpf e dados adicionais.
+- **Editar dados do cliente**: Permite que o usuário altere dados de clientes do sistema.
+- **Detalhar cliente**: Permite que o usuário obtenha detalhes do perfil do cliente, como nome e email.
+- **Listar clientes**: Permite que o usuário obtenha uma listas dos clientes do sistema.
+
+### Pedido
+- **Cadastrar pedidos**: Permite que o usuário, a partir do fornecimento de quantidade, produto e cliente, cadastre pedidos no sistema.
+- **Listar pedidos**: Permite que o usuário obtenha uma listas dos pedidos do sistema.
+
 ## Executando o Sistema
 1. Clone este repositório.
 2. Certifique-se de ter o Node.js e o PostgreSQL instalados em seu sistema.
@@ -49,8 +68,10 @@ O PDV é um sistema de Frente de Caixa que permite aos usuários o fechamento de
 Certifique-se de que você possui todas as dependências instaladas (incluindo às necessàrias para seu controle local) e o banco de dados configurado antes de iniciar o sistema.
 
 ## Considerações
+
 Agora você tem um sistema de Frente de Caixa em execução!<div>
-É importante se atentar de que o sistema está em fase inicial e conta com poucas funcionalidades. Você pode inicialmente, usar as rotas para controle de usuários.
+
+
 
 **Link**
-https://busy-lime-tadpole-belt.cyclic.app/
+https://busy-lime-tadpole-belt.cyclic.app
