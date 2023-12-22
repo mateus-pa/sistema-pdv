@@ -53,7 +53,7 @@ pedidosControlador.cadastrar = async (req, res) => {
         await knex.transaction(async (trx) => {
             inserirPedidoId = await trx('pedidos').insert(novoPedido);
 
-            const destinatarioEmail = 'otonyelotto@gmail.com'
+            const destinatarioEmail = cliente.email;
             transport.sendMail({
                 from: `${process.env.MAIL_NAME} <{${process.env.MAIL_FROM}>`,
                 to: destinatarioEmail,
